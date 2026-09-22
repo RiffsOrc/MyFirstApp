@@ -5,7 +5,7 @@ public sealed class AlertNotificationService : INotificationService
 	public Task ShowCountdownCompleteAsync()
 	{
 		var title = DeviceInfo.Platform == DevicePlatform.WinUI ? "Desktop message" : "Phone reminder";
-		var page = Application.Current?.Windows.FirstOrDefault()?.Page ?? Application.Current?.MainPage;
+		var page = Application.Current?.Windows.FirstOrDefault()?.Page;
 
 		if (page is null)
 		{
@@ -13,6 +13,6 @@ public sealed class AlertNotificationService : INotificationService
 		}
 
 		return MainThread.InvokeOnMainThreadAsync(() =>
-			page.DisplayAlert(title, "You are done for the day. Time to switch to your next activity.", "OK"));
+			page.DisplayAlertAsync(title, "You are done for the day. Time to switch to your next activity.", "OK"));
 	}
 }
