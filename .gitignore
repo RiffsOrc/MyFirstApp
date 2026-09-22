@@ -1,0 +1,82 @@
+# .NET / MAUI generated files
+bin/
+obj/
+.vs/
+.vscode/
+*.user
+*.suo
+*.cache
+*.log
+*.pdb
+*.dll
+*.exe
+*.appxupload
+*.msix
+*.msixsym
+*.pfx
+*.pem
+*.keystore
+
+# MAUI / Android / iOS / Windows build outputs
+artifacts/
+AppPackages/
+BundleArtifacts/
+Generated Files/
+*.apk
+*.aab
+*.ipa
+*.xcarchive
+*.dSYM/
+*.mobileprovision
+*.entitlements
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# NuGet
+packages/
+*.nupkg
+*.snupkg
+project.lock.json
+project.nuget.cache
+
+# Rider / JetBrains
+.idea/
+*.iml
+
+# Visual Studio
+*.userosscache
+*.sln.docstates
+*.pidb
+*.svclog
+*.opendb
+*.VC.db
+*.VC.Macros
+
+# Test results
+TestResults/
+coverage*/
+*.trx
+
+# Local configuration / secrets
+.env
+.env.*
+secrets.json
+local.settings.json
+appsettings.Development.json
+
+# Keep the project itself tracked
+!Resources/
+!Platforms/
+!Properties/
+!App.xaml
+!App.xaml.cs
+!AppShell.xaml
+!AppShell.xaml.cs
+!MainPage.xaml
+!MainPage.xaml.cs
+!MauiProgram.cs
+!MyFirstApp.csproj
+!README.md
