@@ -1,10 +1,12 @@
-﻿namespace MyFirstApp;
+﻿using Microsoft.Extensions.DependencyInjection;
+
+namespace MyFirstApp;
 
 public partial class AppShell : Shell
 {
-    public AppShell(MainPage mainPage)
+    public AppShell(IServiceProvider serviceProvider)
     {
         InitializeComponent();
-        HomeContent.Content = mainPage;
+        HomeContent.ContentTemplate = new DataTemplate(() => serviceProvider.GetRequiredService<MainPage>());
     }
 }

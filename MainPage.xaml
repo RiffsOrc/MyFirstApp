@@ -38,9 +38,7 @@
                                 IsEnabled="{Binding CanStartCountdown}" />
                         <Button Text="Stop"
                                 Command="{Binding StopCountdownCommand}"
-                                IsEnabled="{Binding CanStopCountdown}"
-                                BackgroundColor="{StaticResource LightGray}"
-                                TextColor="{StaticResource Black}" />
+                                IsEnabled="{Binding CanStopCountdown}" />
                     </HorizontalStackLayout>
 
                     <Label Text="{Binding SavedSelectionText}"
