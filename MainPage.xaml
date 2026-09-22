@@ -34,9 +34,11 @@
 
                     <HorizontalStackLayout Spacing="12">
                         <Button Text="Start countdown"
-                                Command="{Binding StartCountdownCommand}" />
+                                Command="{Binding StartCountdownCommand}"
+                                IsEnabled="{Binding CanStartCountdown}" />
                         <Button Text="Stop"
                                 Command="{Binding StopCountdownCommand}"
+                                IsEnabled="{Binding CanStopCountdown}"
                                 BackgroundColor="{StaticResource LightGray}"
                                 TextColor="{StaticResource Black}" />
                     </HorizontalStackLayout>

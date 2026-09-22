@@ -10,16 +10,15 @@ public sealed class MainPageViewModel : ObservableObject
 	private readonly INotificationService _notificationService;
 	private readonly WorkdaySettings _settings;
 	private readonly IWorkdaySettingsStore _settingsStore;
-	private readonly IDispatcherTimer _timer;
 	private string _countdownText = "00:00:00";
 	private bool _isCountdownRunning;
 	private string _savedSelectionText = string.Empty;
 	private TimeSpan _selectedFinishTime;
 	private string _statusMessage = "Choose a finish time and press Start countdown.";
 	private DateTime? _targetFinishTime;
+	private IDispatcherTimer? _timer;
 
 	public MainPageViewModel(
-		IDispatcher dispatcher,
 		IWorkdaySettingsStore settingsStore,
 		CountdownService countdownService,
 		INotificationService notificationService)
@@ -29,10 +28,6 @@ public sealed class MainPageViewModel : ObservableObject
 		_notificationService = notificationService;
 		_settings = _settingsStore.Load();
 		_selectedFinishTime = _settings.FinishTime;
-
-		_timer = dispatcher.CreateTimer();
-		_timer.Interval = TimeSpan.FromSeconds(1);
-		_timer.Tick += OnTimerTick;
 
 		StartCountdownCommand = new Command(StartCountdown);
 		StopCountdownCommand = new Command(StopCountdown);
@@ -52,8 +47,21 @@ public sealed class MainPageViewModel : ObservableObject
 	public bool IsCountdownRunning
 	{
 		get => _isCountdownRunning;
-		private set => SetProperty(ref _isCountdownRunning, value);
+		private set
+		{
+			if (!SetProperty(ref _isCountdownRunning, value))
+			{
+				return;
+			}
+
+			OnPropertyChanged(nameof(CanStartCountdown));
+			OnPropertyChanged(nameof(CanStopCountdown));
+		}
 	}
+
+	public bool CanStartCountdown => !IsCountdownRunning;
+
+	public bool CanStopCountdown => IsCountdownRunning;
 
 	public ObservableCollection<LearningTopic> LearningTopics { get; }
 
@@ -94,12 +102,26 @@ public sealed class MainPageViewModel : ObservableObject
 
 	private void CompleteCountdown()
 	{
-		_timer.Stop();
+		_timer?.Stop();
 		IsCountdownRunning = false;
 		CountdownText = "00:00:00";
 		StatusMessage = "Countdown complete. A reminder was shown to the user.";
 		_targetFinishTime = null;
 		_ = _notificationService.ShowCountdownCompleteAsync();
+	}
+
+	private IDispatcherTimer GetOrCreateTimer()
+	{
+		if (_timer is not null)
+		{
+			return _timer;
+		}
+
+		_timer = Application.Current?.Dispatcher.CreateTimer()
+			?? throw new InvalidOperationException("A UI dispatcher is required to start the countdown.");
+		_timer.Interval = TimeSpan.FromSeconds(1);
+		_timer.Tick += OnTimerTick;
+		return _timer;
 	}
 
 	private void LoadLearningTopics()
@@ -142,6 +164,8 @@ public sealed class MainPageViewModel : ObservableObject
 
 	private void StartCountdown()
 	{
+		var timer = GetOrCreateTimer();
+
 		_settings.FinishTime = SelectedFinishTime;
 		_settingsStore.Save(_settings);
 		_targetFinishTime = _countdownService.GetNextFinishTime(SelectedFinishTime, DateTime.Now);
@@ -160,12 +184,12 @@ public sealed class MainPageViewModel : ObservableObject
 		IsCountdownRunning = true;
 		RefreshSavedSelectionText();
 		OnTimerTick(this, EventArgs.Empty);
-		_timer.Start();
+		timer.Start();
 	}
 
 	private void StopCountdown()
 	{
-		_timer.Stop();
+		_timer?.Stop();
 		IsCountdownRunning = false;
 		_targetFinishTime = null;
 		CountdownText = "00:00:00";

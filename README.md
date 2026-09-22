@@ -22,7 +22,7 @@ The project is intentionally small and beginner-friendly. It already includes pr
 
 ## Good files to explore with beginners
 
-- `/home/runner/work/MyFirstApp/MyFirstApp/MainPage.xaml`
-- `/home/runner/work/MyFirstApp/MyFirstApp/ViewModels/MainPageViewModel.cs`
-- `/home/runner/work/MyFirstApp/MyFirstApp/Models/WorkdaySettings.cs`
-- `/home/runner/work/MyFirstApp/MyFirstApp/Services/PreferencesWorkdaySettingsStore.cs`
+- `MainPage.xaml`
+- `ViewModels/MainPageViewModel.cs`
+- `Models/WorkdaySettings.cs`
+- `Services/PreferencesWorkdaySettingsStore.cs`
