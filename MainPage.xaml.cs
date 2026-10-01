@@ -2,122 +2,21 @@
 
 public partial class MainPage : ContentPage
 {
-	private const string FinishTimeKey = "finish_time";
-	private const string ActiveFinishKey = "active_finish";
-	private const string CompletedWorkdaysKey = "completed_workdays";
-
 	private readonly IDispatcherTimer countdownLoop;
-	private WorkdayTimer? workdayTimer;
-	private int completedWorkdays;
 
 	public MainPage()
 	{
 		InitializeComponent();
 
-		// Loops fill the drop-down lists with 00-23 hours and 00-59 minutes.
-		for (int hour = 0; hour < 24; hour++)
-		{
-			HourPicker.Items.Add(hour.ToString("00"));
-		}
-
-		for (int minute = 0; minute < 60; minute++)
-		{
-			MinutePicker.Items.Add(minute.ToString("00"));
-		}
-
-		TimeSpan savedTime = TimeSpan.FromTicks(
-			Preferences.Default.Get(FinishTimeKey, new TimeSpan(17, 0, 0).Ticks));
-		HourPicker.SelectedIndex = savedTime.Hours;
-		MinutePicker.SelectedIndex = savedTime.Minutes;
-
-		completedWorkdays = Preferences.Default.Get(CompletedWorkdaysKey, 0);
-		ShowCompletedWorkdays();
-
-		countdownLoop = Dispatcher.CreateTimer();
-		countdownLoop.Interval = TimeSpan.FromSeconds(1);
-		countdownLoop.Tick += OnCountdownTick;
-
-		RestoreCountdown();
+		// Step n: fill the hour and minute pickers with values.
+		// Step n: initiate the countdown Loop Timer. Create a Timer, set its interval, and attach the Tick event handler.
 	}
 
-	private void OnStartClicked(object? sender, EventArgs e)
-	{
-		TimeSpan finishTimeOfDay = new TimeSpan(HourPicker.SelectedIndex, MinutePicker.SelectedIndex, 0);
-		DateTime finishTime = DateTime.Today.Add(finishTimeOfDay);
+// Step n: implement the start button click handler and calculate the finish time based on the selected hour and minute and start the countdown
+// dont forget to attach the click event handler to the StartButton in the constructor. And add the click handler in the Clicked property in xaml
 
-		if (finishTime <= DateTime.Now)
-		{
-			finishTime = finishTime.AddDays(1);
-		}
+// Step n: implement the method to start the countdown with the given finish time.
 
-		Preferences.Default.Set(FinishTimeKey, finishTimeOfDay.Ticks);
-		Preferences.Default.Set(ActiveFinishKey, finishTime.ToString("O"));
-		StartCountdown(finishTime);
-	}
-
-	private void StartCountdown(DateTime finishTime)
-	{
-		workdayTimer = new WorkdayTimer(finishTime);
-		StatusLabel.Text = $"Work ends at {finishTime:h:mm tt}.";
-		UpdateCountdown();
-		countdownLoop.Start();
-	}
-
-	private async void OnCountdownTick(object? sender, EventArgs e)
-	{
-		if (workdayTimer is null)
-		{
-			return;
-		}
-
-		UpdateCountdown();
-
-		if (workdayTimer.IsFinished)
-		{
-			countdownLoop.Stop();
-			Preferences.Default.Remove(ActiveFinishKey);
-			completedWorkdays++;
-			Preferences.Default.Set(CompletedWorkdaysKey, completedWorkdays);
-			ShowCompletedWorkdays();
-
-			string message = workdayTimer.GetCompletionMessage(completedWorkdays);
-			StatusLabel.Text = message;
-			await DisplayAlertAsync("Workday complete", message, "Clock out");
-		}
-	}
-
-	private void UpdateCountdown()
-	{
-		if (workdayTimer is null)
-		{
-			return;
-		}
-
-		workdayTimer.Update(DateTime.Now);
-		CountdownLabel.Text = workdayTimer.GetTimeText();
-	}
-
-	private void RestoreCountdown()
-	{
-		string savedFinishTime = Preferences.Default.Get(ActiveFinishKey, string.Empty);
-
-		if (!DateTime.TryParse(savedFinishTime, out DateTime finishTime))
-		{
-			return;
-		}
-
-		// A countdown saved from an earlier session may already be over; drop it instead of firing at launch.
-		if (finishTime <= DateTime.Now)
-		{
-			Preferences.Default.Remove(ActiveFinishKey);
-			return;
-		}
-
-		StartCountdown(finishTime);
-	}
-
-	private void ShowCompletedWorkdays()
-	{
-		CompletedCountLabel.Text = $"Completed workdays: {completedWorkdays}";
-	}
+// Step n: implement the Tick event handler for the countdown loop timer. 
+// The Countdown Timer should update the countdown display and handle the completion of the countdown.
 }

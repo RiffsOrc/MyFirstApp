@@ -46,7 +46,7 @@
                             <Picker
                                 x:Name="HourPicker"
                                 AutomationId="HourPicker"
-                                Background="Transparent"
+                                Background="#00030303"
                                 TextColor="#172121"
                                 FontSize="22"
                                 HorizontalOptions="Fill" />
@@ -91,7 +91,6 @@
                         FontAttributes="Bold"
                         HeightRequest="48"
                         CornerRadius="6"
-                        Clicked="OnStartClicked"
                         HorizontalOptions="Fill" />
                 </VerticalStackLayout>
             </Border>

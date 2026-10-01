@@ -1,35 +1,9 @@
 namespace MyFirstApp;
 
-// A base class contains behavior that other kinds of countdowns can reuse.
-public abstract class CountdownTimer
-{
-	public DateTime FinishTime { get; }
-	public TimeSpan TimeRemaining { get; private set; }
-	public bool IsFinished => TimeRemaining == TimeSpan.Zero;
+// Step 1: write a base class of a CountdownTimer, which other specific countdown timers can inherit from.
 
-	protected CountdownTimer(DateTime finishTime)
-	{
-		FinishTime = finishTime;
-		Update(DateTime.Now);
-	}
+// Step 2: think about what a Timer object should have as its Properties
 
-	public void Update(DateTime currentTime)
-	{
-		if (currentTime >= FinishTime)
-		{
-			TimeRemaining = TimeSpan.Zero;
-		}
-		else
-		{
-			TimeRemaining = FinishTime - currentTime;
-		}
-	}
+// Step 3: think about what a Timer object should be able to do (its Methods)
 
-	public string GetTimeText()
-	{
-		int hours = (int)TimeRemaining.TotalHours;
-		return $"{hours:00}:{TimeRemaining.Minutes:00}:{TimeRemaining.Seconds:00}";
-	}
-
-	public abstract string GetCompletionMessage(int completedWorkdays);
-}
+// Step 4: implement the methods for the Timer object including its constructor

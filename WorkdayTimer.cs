@@ -1,7 +1,11 @@
 namespace MyFirstApp;
 
+// Step n: implement the WorkdayTimer class, which provides custom messages for the completion of a workday.
+
+// Step n: implement the custom Completion Message, that gets shown whenever the timer finishes
+
 // Inheritance: WorkdayTimer receives the countdown behavior from CountdownTimer.
-public class WorkdayTimer : CountdownTimer
+public class WorkdayTimer //: CountdownTimer
 {
 	private readonly List<string> messages =
 	[
@@ -11,23 +15,7 @@ public class WorkdayTimer : CountdownTimer
 		"Time to clock out and power down."
 	];
 
-	public WorkdayTimer(DateTime finishTime) : base(finishTime)
+	public WorkdayTimer(DateTime finishTime) //: base(finishTime)
 	{
-	}
-
-	public override string GetCompletionMessage(int completedWorkdays)
-	{
-		int messageNumber = (completedWorkdays - 1) % messages.Count;
-
-		// This loop demonstrates checking each item in a list.
-		for (int index = 0; index < messages.Count; index++)
-		{
-			if (index == messageNumber)
-			{
-				return messages[index];
-			}
-		}
-
-		return "The workday is over!";
 	}
 }
