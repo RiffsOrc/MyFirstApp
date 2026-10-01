@@ -101,10 +101,19 @@ public partial class MainPage : ContentPage
 	{
 		string savedFinishTime = Preferences.Default.Get(ActiveFinishKey, string.Empty);
 
-		if (DateTime.TryParse(savedFinishTime, out DateTime finishTime))
+		if (!DateTime.TryParse(savedFinishTime, out DateTime finishTime))
 		{
-			StartCountdown(finishTime);
+			return;
 		}
+
+		// A countdown saved from an earlier session may already be over; drop it instead of firing at launch.
+		if (finishTime <= DateTime.Now)
+		{
+			Preferences.Default.Remove(ActiveFinishKey);
+			return;
+		}
+
+		StartCountdown(finishTime);
 	}
 
 	private void ShowCompletedWorkdays()
